@@ -1,25 +1,10 @@
 //Include and link appropriate libraries and headers//
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dcompiler.lib")
-#pragma comment(lib, "DirectXTK.lib")
-#pragma comment (lib, "D3D10_1.lib")
-#pragma comment (lib, "DXGI.lib")
-#pragma comment (lib, "D2D1.lib")
-#pragma comment (lib, "dwrite.lib")
-#pragma comment (lib, "dinput8.lib")
-#pragma comment (lib, "dxguid.lib")
-
-
 #include "WICTextureLoader.h"
-#include <windows.h>
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <d3dcompiler.h>
 #include <dinput.h>
 #include "Application.h"
 #include "TimeManage.h"
 #include "AllStruct.h"
-
+#include "DX_PCH.h"
 
 
 #include <D3D10_1.h>
@@ -27,6 +12,7 @@
 #include <sstream>
 #include <dwrite.h>
 #include "Font.h"
+#include "Camera.h"
 using namespace DirectX;
 //Global Declarations - Interfaces//
 IDXGISwapChain* SwapChain;
@@ -56,11 +42,8 @@ ID3D11Texture2D *BackBuffer11;
 
 IDirectInputDevice8* DIKeyboard;
 IDirectInputDevice8* DIMouse;
-
 std::wstring printText;
-
 HRESULT hr;
-
 DIMOUSESTATE mouseLastState;
 LPDIRECTINPUT8 DirectInput;
 
@@ -69,30 +52,10 @@ float rotz = 0;
 float scaleX = 1.0f;
 float scaleY = 1.0f;
 
-XMMATRIX Rotationx;
-XMMATRIX Rotationz;
-
 XMMATRIX WVP;
 XMMATRIX cube1World;
-XMMATRIX cube2World;
-XMMATRIX camView;
 XMMATRIX camProjection;
-
-XMVECTOR camPosition;
-XMVECTOR camTarget;
-XMVECTOR camUp;
-
-XMVECTOR DefaultForward =	XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR DefaultRight =		XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-XMVECTOR camForward =		XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR camRight =			XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-
-XMMATRIX camRotationMatrix;
 XMMATRIX groundWorld;
-float moveLeftRight = 0.0f;
-float moveBackForward = 0.0f;
-float camYaw = 0.0f;
-float camPitch = 0.0f;
 
 XMMATRIX Rotation;
 XMMATRIX Scale;
@@ -110,7 +73,7 @@ void UpdateScene(double time);
 void RenderText(std::wstring text, int inInt);
 
 // Camera Method
-void UpdateCamera();
+//void UpdateCamera();
 int messageloop();
 
 bool InitDirectInput(HINSTANCE hInstance, HWND hwnd);
@@ -118,11 +81,10 @@ void DetectInput(double time);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Font* font;
+Camera* camera;
 Light light;
-
 cbPerObject cbPerObj;
 cbPerFrame constbuffPerFrame;
-
 D3D11_INPUT_ELEMENT_DESC layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,	 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -130,6 +92,7 @@ D3D11_INPUT_ELEMENT_DESC layout[] =
 	{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
 UINT numElements = ARRAYSIZE(layout);
+
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 
@@ -150,7 +113,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPSTR lpCmdLine,
 			L"Error", MB_OK);
 		return 0;
 	}
-
+	camera = new Camera(Width, Height);
 	if (!InitScene())    //Initialize our scene
 	{
 		MessageBox(0, L"Scene Initialization - Failed",
@@ -166,39 +129,10 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPSTR lpCmdLine,
 	}
 
 	messageloop();
-
 	CleanUp(app->GetWindowHandle());
 	font->ReleaseAll();
 	return 0;
 }
-
-void UpdateCamera()
-{
-	camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
-	camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
-	camTarget = XMVector3Normalize(camTarget);
-
-	XMMATRIX RotateYTempMatrix;
-	RotateYTempMatrix = XMMatrixRotationY(camYaw);
-	
-
-	camRight = XMVector3TransformCoord(DefaultRight, RotateYTempMatrix);
-	camUp = XMVector3TransformCoord(camUp, RotateYTempMatrix);
-	camForward = XMVector3TransformCoord(DefaultForward, RotateYTempMatrix);
-
-	camPosition += moveLeftRight * camRight;
-	camPosition += moveBackForward * camForward;
-
-	moveLeftRight = 0.0f;
-	moveBackForward = 0.0f;
-
-	camTarget = camPosition + camTarget;
-	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
-}
-
-
-
-
 
 bool InitializeDirect3d11App(HINSTANCE hInstance, HWND hWnd)
 {
@@ -268,7 +202,6 @@ bool InitializeDirect3d11App(HINSTANCE hInstance, HWND hWnd)
 
 	return true;
 }
-
 bool InitDirectInput(HINSTANCE hInstance, HWND hwnd)
 {
 	hr = DirectInput8Create(hInstance,
@@ -290,10 +223,10 @@ bool InitDirectInput(HINSTANCE hInstance, HWND hwnd)
 
 	hr = DIMouse->SetDataFormat(&c_dfDIMouse);
 	hr = DIMouse->SetCooperativeLevel(hwnd, DISCL_EXCLUSIVE | DISCL_NOWINKEY | DISCL_FOREGROUND);
-
+	if (FAILED(hr))
+		return false;
 	return true;
 }
-
 void DetectInput(double time)
 {
 	DIMOUSESTATE mouseCurrState;
@@ -308,32 +241,30 @@ void DetectInput(double time)
 	float speed = 15.0f * static_cast<float>(time);
 	if (keyboardState[DIK_A] & 0x80)
 	{
-		moveLeftRight -= speed;
+		camera->moveLeftRight -= speed;
 	}
 	if (keyboardState[DIK_D] & 0x80)
 	{
-		moveLeftRight += speed;
+		camera->moveLeftRight += speed;
 	}
 	if (keyboardState[DIK_W] * 0x80)
 	{
-		moveBackForward += speed;
+		camera->moveBackForward += speed;
 	}
 	if (keyboardState[DIK_S] & 0x80)
 	{
-		moveBackForward -= speed;
+		camera->moveBackForward -= speed;
 	}
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
 	{
-		camYaw += mouseLastState.lX * 0.01f;
-		camPitch += mouseCurrState.lY * 0.01f;
+
+		camera->camYaw += mouseLastState.lX * 0.01f;
+		camera->camPitch += mouseCurrState.lY * 0.01f;
 		mouseLastState = mouseCurrState;
 	}
-
-	UpdateCamera();
+	camera->UpdateCamera();
 	return;
 }
-
-
 void CleanUp(HWND hwnd)
 {
 
@@ -362,8 +293,6 @@ void CleanUp(HWND hwnd)
 	DIMouse->Unacquire();
 	DirectInput->Release();
 }
-
-
 bool InitScene()
 {
 
@@ -373,11 +302,14 @@ bool InitScene()
 	hr = D3DCompileFromFile(L"effect.fx", nullptr, nullptr, "VS", "vs_4_0", dwShaderFlags, 0, &VS_Buffer, &pErrorBlob);
 	hr = D3DCompileFromFile(L"effect.fx", nullptr, nullptr, "PS", "ps_4_0", dwShaderFlags, 0, &PS_Buffer, &pErrorBlob);
 	hr = D3DCompileFromFile(L"effect.fx", nullptr, nullptr, "D2D_PS", "ps_4_0", dwShaderFlags, 0, &D2D_PS_Buffer, &pErrorBlob);
+	if (FAILED(hr))
+		return false;
 	//Create the Shader Objects
 	hr = dev->CreateVertexShader(VS_Buffer->GetBufferPointer(), VS_Buffer->GetBufferSize(), NULL, &VS);
 	hr = dev->CreatePixelShader(PS_Buffer->GetBufferPointer(), PS_Buffer->GetBufferSize(), NULL, &PS);
 	hr = dev->CreatePixelShader(D2D_PS_Buffer->GetBufferPointer(), D2D_PS_Buffer->GetBufferSize(), NULL, &D2D_PS);
-
+	if (FAILED(hr))
+		return false;
 	//Set Vertex and Pixel Shaders
 	devcon->VSSetShader(VS, 0, 0);
 	devcon->PSSetShader(PS, 0, 0);
@@ -404,7 +336,6 @@ bool InitScene()
 
 	D3D11_BUFFER_DESC indexBufferDesc;
 	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
-
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(DWORD) * 2 * 3;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -412,13 +343,11 @@ bool InitScene()
 	indexBufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA iinitData;
-
 	iinitData.pSysMem = indices;
 	dev->CreateBuffer(&indexBufferDesc, &iinitData, &squareIndexBuffer);
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(Vertex) * 4;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -426,7 +355,6 @@ bool InitScene()
 	vertexBufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
-
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 	vertexBufferData.pSysMem = v;
 	hr = dev->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &squareVertBuffer);
@@ -445,7 +373,6 @@ bool InitScene()
 	//Create the Viewport
 	D3D11_VIEWPORT viewport;
 	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
-
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.Width = Width;
@@ -475,16 +402,8 @@ bool InitScene()
 	cbbd.MiscFlags = 0;
 	hr = dev->CreateBuffer(&cbbd, NULL, &cbPerFrameBuffer);
 
-	//Camera information
-	camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
-	camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-	//Set the View matrix
-	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
-
-	//Set the Projection matrix
-	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)Width / Height, 1.0f, 1000.0f);
+	camera->CameraInit();
+	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)Width / Height, 1.0f, 1000.0f);//Set the Projection matrix
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -568,9 +487,9 @@ void DrawScene()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	devcon->IASetVertexBuffers(0, 1, &squareVertBuffer, &stride, &offset);
-
+	
 	//Set the WVP matrix and send it to the constant buffer in effect file
-	WVP = groundWorld * camView * camProjection;
+	WVP = groundWorld * camera->getCamViewMatrix() * camProjection;
 	cbPerObj.World = XMMatrixTranspose(groundWorld);
 	cbPerObj.WVP = XMMatrixTranspose(WVP);
 	devcon->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
@@ -580,8 +499,6 @@ void DrawScene()
 
 	devcon->RSSetState(CCWcullMode);
 	devcon->DrawIndexed(6, 0, 0);
-	
-
 
 	devcon->OMSetBlendState(Transparency, NULL, 0xffffffff);
 	font->RenderText(devcon, L"FPS: ", fps, WVP, cbPerObj, CubesTexSamplerState,cbPerObjectBuffer, D2D_PS);
@@ -621,9 +538,7 @@ int messageloop() {
 				frameCount = 0;
 				StartTimer();
 			}
-
 			frameTime = GetFrameTime();
-
 			DetectInput(frameTime);
 			UpdateScene(frameTime);
 			DrawScene();

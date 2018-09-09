@@ -1,8 +1,7 @@
 #ifndef _FONT_H_
 #define _FONT_H_
 #include "AllStruct.h"
-#include <Windows.h>
-#include <d3d11.h>
+#include "DX_PCH.h"
 
 #include <D3D10_1.h>
 #include <D2D1.h>

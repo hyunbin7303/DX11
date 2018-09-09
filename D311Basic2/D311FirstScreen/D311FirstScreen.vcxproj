@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>DX_PCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -140,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="TimeManage.cpp" />
     <ClCompile Include="FirstScreen.cpp" />
@@ -147,6 +149,8 @@
   <ItemGroup>
     <ClInclude Include="AllStruct.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="DX_PCH.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="TimeManage.h" />
   </ItemGroup>
