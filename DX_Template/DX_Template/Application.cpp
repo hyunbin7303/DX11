@@ -80,7 +80,13 @@ LRESULT Application::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == VK_ESCAPE) {
 			DestroyWindow(hwnd);
 		}
+
+
 		return 0;
+
+	case WM_KEYUP:
+
+
 
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -91,3 +97,12 @@ LRESULT Application::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		wParam,
 		lParam);
 }
+
+//int KeyConfigSetup()
+//{
+//	if (wParam == VK_F1)
+//		MessageBox(NULL, L"HAHA", L"Kevin Game Applicaiton", MB_OKCANCEL);
+//	return 0;
+//}
+
+
