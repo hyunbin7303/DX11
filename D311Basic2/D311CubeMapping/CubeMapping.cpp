@@ -165,10 +165,7 @@ void InitD2DScreenTexture();
 void UpdateScene(double time);
 
 void UpdateCamera();
-///////////////**************new**************////////////////////
 void CreateSphere(int LatLines, int LongLines);
-///////////////**************new**************////////////////////
-
 void RenderText(std::wstring text, int inInt);
 
 void StartTimer();
