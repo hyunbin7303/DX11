@@ -106,14 +106,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -158,9 +158,6 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowManagement.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="effect.fx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX.h" />

@@ -14,46 +14,73 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{8b5ce206-b82d-4aea-b06b-258849d3c414}</UniqueIdentifier>
+      <UniqueIdentifier>{8a3a2cd7-8bb9-4274-95ee-d01e14c48726}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <Image Include="braynzar.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="seafloor.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontShaderClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowsApp.cpp">
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="DX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontShaderClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowsApp.h">
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\Tutorial04.fx">
+    <FxCompile Include="Shaders\Texture.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\Tutorial04_PS.hlsl">
+    <FxCompile Include="Shaders\Texture_PS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\Tutorial04_VS.hlsl">
+    <FxCompile Include="Shaders\Texture_VS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Tutorial04.fx" />
-    <FxCompile Include="Tutorial04_PS.hlsl" />
-    <FxCompile Include="Tutorial04_VS.hlsl" />
   </ItemGroup>
 </Project>

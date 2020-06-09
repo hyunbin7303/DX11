@@ -1,37 +1,22 @@
-/*
-FILE	   : SimpleTriangle.cpp
-PROGRAMMER : Kevin Park(Hyunbin Park)
-DESCRIPTION : This application is used for displaying a colorful triangle on the screen.
-*/
-
 #include "DX.h"
-
-
 using namespace DirectX;
-
 // Global Variable setting
 HWND g_hwnd = NULL;
 HINSTANCE hInst;
 const int Width = 800;
 const int Height = 600;
 
-
 // Global Variable setting For DirectX
 IDXGISwapChain* SwapChain;
 ID3D11Device* dev;
 ID3D11DeviceContext* devcon;
 ID3D11RenderTargetView* renderTarget;
-
-
 ID3D11Buffer* drawVertexBuf;
 ID3D11VertexShader* VS;
 ID3D11PixelShader* PS;
 ID3D10Blob* VS_Buffer;
 ID3D10Blob* PS_Buffer;
 ID3D11InputLayout* verLayout;
-
-
-
 struct Vertex
 {
 	Vertex() {}
@@ -39,19 +24,12 @@ struct Vertex
 	XMFLOAT3 position;
 	XMFLOAT4 color;
 };
-
 D3D11_INPUT_ELEMENT_DESC layout[] =
 {
 	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,0,D3D11_INPUT_PER_VERTEX_DATA, 0},
 	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 };
-/*
-DXGI_FORMAT_R32G32B32A32_FLOAT enumerated type for the format, thats 16 bytes, so if we were to add another element to the input layout, the next element would have to put 28 for the 5th parameter, since it would be located 28 bytes from the beginning of the array.
-*/
-
-
 UINT numElements = ARRAYSIZE(layout);
-void Update();
 void Render();
 int MessageLoop()
 {
@@ -70,14 +48,11 @@ int MessageLoop()
 		}
 		else
 		{
-			Update();
 			Render();
 		}
 	}
 	return (int)msg.wParam;
 }
-
-
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -95,10 +70,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
-
 bool D3d11Init();
 void ReleaseEverything();
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// Initializing application 
@@ -145,11 +118,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	return 0;
 }
-
-void Update()
-{
-}
-
 void Render()
 {
 	float Color[4] = { 0.0f, 0.5f, 0.5f, 0.0f };
@@ -157,13 +125,9 @@ void Render()
 	devcon->Draw(3, 0);
 	SwapChain->Present(0, 0);
 }
-
 bool D3d11Init()
 {
 	HRESULT hr = S_OK;
-
-	// Describes a display mode
-	// Describing the back buffer.
 	DXGI_MODE_DESC bufDesc;
 	ZeroMemory(&bufDesc, sizeof(DXGI_MODE_DESC));
 	bufDesc.Width = Width;
@@ -255,7 +219,6 @@ bool D3d11Init()
 	return true;
 
 }
-
 void ReleaseEverything()
 {
 	if (SwapChain)

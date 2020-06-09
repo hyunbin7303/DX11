@@ -98,11 +98,5 @@ LRESULT Application::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		lParam);
 }
 
-//int KeyConfigSetup()
-//{
-//	if (wParam == VK_F1)
-//		MessageBox(NULL, L"HAHA", L"Kevin Game Applicaiton", MB_OKCANCEL);
-//	return 0;
-//}
 
 
