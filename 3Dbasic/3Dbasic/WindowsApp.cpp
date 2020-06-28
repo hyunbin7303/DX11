@@ -6,12 +6,11 @@ WindowsApp::WindowsApp()
 WindowsApp::~WindowsApp()
 {
 }
-
 int WindowsApp::InitWin(HINSTANCE hInstance, int cmdShow)
 {
 	WNDCLASSEX wc;
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
-	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.cbSize = sizeof(WNDCLASSEX); 
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
@@ -23,7 +22,6 @@ int WindowsApp::InitWin(HINSTANCE hInstance, int cmdShow)
 		MessageBox(NULL, L"Error registering class",L"Error", MB_OK | MB_ICONERROR);
 		return -1;
 	}
-
 	RECT wr = { 0, 0, 800, 600 };
 	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -59,7 +57,12 @@ LRESULT WindowsApp::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		if (wParam == VK_ESCAPE) {
 			DestroyWindow(hWnd);
 		}
+		if (wParam == 'D')
+		{
+			SetWindowText(hWnd, L"Respects");
+		}
 		return 0;
+
 
 	case WM_DESTROY:
 		PostQuitMessage(0);

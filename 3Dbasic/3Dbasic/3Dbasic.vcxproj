@@ -82,6 +82,9 @@
       <ShaderModel>4.0</ShaderModel>
       <ShaderType>Effect</ShaderType>
     </FxCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -146,9 +149,6 @@
     <ClInclude Include="WindowsApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\Tutorial04.fx" />
-    <FxCompile Include="Shaders\Tutorial04_PS.hlsl" />
-    <FxCompile Include="Shaders\Tutorial04_VS.hlsl" />
     <FxCompile Include="Tutorial04.fx" />
     <FxCompile Include="Tutorial04_PS.hlsl" />
     <FxCompile Include="Tutorial04_VS.hlsl" />

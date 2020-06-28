@@ -150,12 +150,14 @@
   <ItemGroup>
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WindowsApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="effect.fx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX.h" />
+    <ClInclude Include="WindowsApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -126,17 +126,11 @@ void DrawScene();
 bool InitD2D_D3D101_DWrite(IDXGIAdapter1* Adapter);
 void InitD2DScreenTexture();
 void UpdateScene(double time);
-
 void RenderText(std::wstring text, int inInt);
-
 void StartTimer();
 double GetTime();
 double GetFrameTime();
-
-bool InitializeWindow(HINSTANCE hInstance,
-	int ShowWnd,
-	int width, int height,
-	bool windowed);
+bool InitializeWindow(HINSTANCE hInstance,int ShowWnd,int width, int height,bool windowed);
 int messageloop();
 
 ///////////////**************new**************////////////////////
@@ -170,17 +164,15 @@ struct Light
 	XMFLOAT4 ambient;
 	XMFLOAT4 diffuse;
 };
-
 Light light;
 
 struct cbPerFrame
 {
 	Light  light;
 };
-
 cbPerFrame constbuffPerFrame;
 
-//Vertex Structure and Vertex Layout (Input Layout)//
+		//Vertex Structure and Vertex Layout (Input Layout)//
 struct Vertex    //Overloaded Vertex Structure
 {
 	Vertex() {}
@@ -197,8 +189,8 @@ struct Vertex    //Overloaded Vertex Structure
 D3D11_INPUT_ELEMENT_DESC layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-{ "NORMAL",     0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "NORMAL",     0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
 UINT numElements = ARRAYSIZE(layout);
 

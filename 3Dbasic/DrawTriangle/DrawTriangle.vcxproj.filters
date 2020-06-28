@@ -21,7 +21,7 @@
     <ClCompile Include="DX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowManagement.cpp">
+    <ClCompile Include="WindowsApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,8 +29,11 @@
     <ClInclude Include="DX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindowManagement.h">
+    <ClInclude Include="WindowsApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\effect.fx" />
   </ItemGroup>
 </Project>
