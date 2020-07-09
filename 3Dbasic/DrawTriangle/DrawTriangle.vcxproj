@@ -157,13 +157,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="WindowsApp.cpp" />
+    <ClCompile Include="Windows.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="DX.h" />
-    <ClInclude Include="WindowsApp.h" />
+    <ClInclude Include="Windows.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\effect.fx" />
